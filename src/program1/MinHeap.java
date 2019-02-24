@@ -47,32 +47,17 @@ public class MinHeap<T extends Comparable<T>> {
     private void heapDown(int i) {
 // The indices of the elements children
         int leftChild = (2 * i) + 1;
-        int rightChild = (2 * 1) + 2;
-	if (leftChild >= currentSize) // Check if leaf node
-	    return;
-	if (heap[i].compareTo(heap[leftChild]) > 0 || heap[i].compareTo(heap[rightChild]) > 0) {
-	    if (heap[leftChild].compareTo(heap[rightChild]) > 0) {
-		swap(i, rightChild);
-		heapDown(rightChild);
-	    }
-	    else {
-		swap(i, leftChild);
-		heapDown(leftChild);
-	    }
-	}
-/*	int min = i; // this will be the index of the smallest element of the three
-        
-        if (leftChild >= currentSize) // Check if leaf node
-            return;
-        if(heap[i].compareTo(heap[leftChild]) > 0) // Check if left child is smaller
+        int rightChild = (2 * i) + 2;
+	int min = i; // this will be the index of the smallest element of the three
+        if(leftChild < currentSize && heap[i].compareTo(heap[leftChild]) > 0) // Check if left child is smaller
             min = leftChild;        
         if (rightChild < currentSize && heap[min].compareTo(heap[rightChild]) > 0) // check if right child is smallest
             min = rightChild;
         
-        if (min != i) { // swap if the element is larger than its child(ren)
+        if (min != i) { // swap if the element is larger than its child
             swap(i, min);
             heapDown(min);
-        } */
+        }
     }
     
 /**
@@ -136,14 +121,19 @@ public class MinHeap<T extends Comparable<T>> {
         return currentSize == 0;
     }
     
-    public void print() {
-	for (int i = 0; i < currentSize; i++) {
-	    System.out.print(heap[i] + " ");
-	}
-	System.out.println();
+/**
+ * Check if the heap is full
+ * @return true if the heap is full
+ */
+    public boolean isFull() {
+	return currentSize == capacity;
     }
-    public T[] getHeap() {
+
+/**
+ * Return the heap as an array
+ * @return the heap
+ */
+    public T[] getHeap() { // Useful for debugging
 	return heap;
     }
-  
 }
