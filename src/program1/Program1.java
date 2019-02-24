@@ -31,8 +31,20 @@ public class Program1 {
         consThread2.start();
         pt1.start();
 
-        //main thread will detect if heap is empty and pt1 is complete.
+        // Waits for producer thread to be active before proceeding in main.
+        try {
+            pt1.join();
+        } catch (InterruptedException ie) {
+            System.out.println(ie);
+        }
         
+        // Stall main thread while heap has items to process 
+        while (processHeap.size() > 0) {
+            
+        }
+        
+        consThread1.interrupt();
+        consThread2.interrupt();
     }
     
 }
