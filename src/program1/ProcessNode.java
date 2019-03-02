@@ -10,7 +10,7 @@ public class ProcessNode implements Comparable<ProcessNode> {
     private int timeSlice;
     
     public ProcessNode(int priority, int timeSlice) {
-        id = System.currentTimeMillis();
+        id = (int) (Math.random() * 10000);
         this.priority = priority;
         this.timeSlice = timeSlice;
     }
