@@ -1,49 +1,48 @@
 package program1;
-import java.util.*;
+
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- *
+ * A consumer object that executes ProcessNode objects from a shared heap
  * @author petercheng
  */
 public class Consumer implements Runnable {
     private MinHeap queue;
     private String name;
     private ReentrantLock lock;
-    Boolean flag;
     
-    public Consumer(MinHeap queue, String name, ReentrantLock lock, Boolean flag) {
+/**
+ * The constructor for the consumer
+ * @param queue the shared queue/heap for ProcessNode objects
+ * @param name the name of this consumer object
+ * @param lock the shared lock for mutual exclusion
+ */
+    public Consumer(MinHeap queue, String name, ReentrantLock lock) {
         this.queue = queue;
         this.name = name;
 	this.lock = lock;
-	this.flag = flag;
     }
     
+/**
+ * run the consumer, simulating process execution by sleeping for the process's time slice
+ */
     public void run() {
         try {
-	//    lock.lock();
-            while(flag || !queue.isEmpty()) { // I think this might be wrong
-                
-                //waits for 1 second if queue is empty.
-                //TODO: replace with .isEmpty() function
-                if (queue.isEmpty()) {
+            while(true) { // this infinite loop will be interrupted
+                if (queue.isEmpty()) { // wait a half second if the queue is empty
                     Thread.sleep(500);
                 } else {
-		    lock.lock();
-		    ProcessNode node = (ProcessNode) queue.remove();
-
+		    lock.lock(); // lock for mutual exclusion
+		    ProcessNode node = (ProcessNode) queue.remove(); // remove the first process
+                    System.out.println("\t" + this.name + " executed process " + node.getId() + " with priority " + node.getPriority());
 		    lock.unlock();
-                    System.out.println("\t" + this.name + " executed process " + node.getId() + " with priority " + node.getPriority());		    
-                    //TODO: implement sleep time from process node.
-                    Thread.sleep(node.getTimeSlice());;
+                    Thread.sleep(node.getTimeSlice()); // sleep to simulate process execution
                 }
             }
         } catch (Exception e) {
-            System.out.println(e + " in Consumer " + name);
+            System.out.println(e + " in " + name);
         } finally {
-	    // TODO: this part CANNOT be omitted
-	    // Clean up
-	    if (lock.isLocked())
+	    if (lock.isLocked()) // check if still locked
 		lock.unlock();
 	}
     }

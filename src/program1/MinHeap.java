@@ -25,15 +25,14 @@ public class MinHeap<T extends Comparable<T>> {
     }
     
 /**
- * Re-heap an element upward from its current position
+ * Recursively re-heap an element upward from its current position
  * @param i the index of the item to be re-heaped
  */
      private void heapUp(int i) {
-        if (i == 0) // Check if the root node
+        if (i == 0) // Check if it's the root node
             return;
         
         int parent = (i - 1) / 2; // The index of the element's parent
-        
         if(heap[parent].compareTo(heap[i]) > 0) { // Swap if smaller than its parent
             swap(parent, i);
             heapUp(parent);
@@ -41,11 +40,11 @@ public class MinHeap<T extends Comparable<T>> {
     }
     
 /**
- * Re-heap an element downward from its current position
+ * Recursively re-heap an element downward from its current position
  * @param i the index of the item to be re-heaped
  */
     private void heapDown(int i) {
-// The indices of the elements children
+// The indices of the element's children
         int leftChild = (2 * i) + 1;
         int rightChild = (2 * i) + 2;
 	int min = i; // this will be the index of the smallest element of the three
@@ -76,7 +75,7 @@ public class MinHeap<T extends Comparable<T>> {
  * @param t the element to be added to the heap
  */
     public void add(T t) {
-	if (currentSize == capacity) // Check if full
+	if (isFull()) // Check if full
 	    throw new ArrayIndexOutOfBoundsException("The heap is already full.");
         heap[currentSize] = t; // add to the heap and increase the size
 	heapUp(currentSize); // re-heap
@@ -130,10 +129,10 @@ public class MinHeap<T extends Comparable<T>> {
     }
 
 /**
- * Return the heap as an array
+ * Return the heap as an array (useful for debugging)
  * @return the heap
  */
-    public T[] getHeap() { // Useful for debugging
+    public T[] getHeap() {
 	return heap;
     }
 }
